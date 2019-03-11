@@ -1,0 +1,12 @@
+---
+# defaults file for ssh
+
+# ssh_permitrootlogin (yes|prohibit-password|forced-commands-only|no)
+# The default is prohibit-password as ssh default configuration
+# ssh_permitrootlogin: 'prohibit-password'
+
+# ssh_passwordauthentication (yes|no)
+# Specifies whether password authentication is allowed. The default is yes as
+# in ssh default configuration
+# ssh_passwordauthentication: 'yes'
+...

@@ -1,0 +1,9 @@
+---
+# handlers file for ssh
+- name: ssh restart
+  service:
+    name: 'ssh'
+    state: 'restarted'
+  tags:
+    - ssh
+...
