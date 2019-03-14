@@ -2,10 +2,11 @@
 
 Ansible role to configure ssh.
 
-For now on, this role handle two configuration parameters :
+For now on, this role handle these configuration parameters :
 
 - PermitRootLogin
 - PasswordAuthentication
+- GSSAPIAuthentication
 
 ## Requirements
 
@@ -13,7 +14,7 @@ None.
 
 ## Role Variables
 
-Two ! See defaults/main.yml for details
+See defaults/main.yml for details
 
 ## Dependencies
 

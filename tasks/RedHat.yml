@@ -1,0 +1,16 @@
+---
+- name: permitrootlogin
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^[#\s]*PermitRootLogin\s+.*$'
+    line: 'PermitRootLogin {{ ssh_permitrootlogin }}'
+    backup: yes
+    validate: /usr/sbin/sshd -t -f %s
+  when:
+    - ssh_permitrootlogin is defined
+    - ssh_permitrootlogin | lower() in [ 'yes', 'no', 'without-password', 'prohibit-password', 'forced-commands-only' ]
+  notify: ssh restart
+  tags:
+    - ssh
+    - permitrootlogin
+...

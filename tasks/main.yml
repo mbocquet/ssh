@@ -1,22 +1,8 @@
 ---
 # tasks file for ssh
-- name: permitrootlogin
-  lineinfile:
-    dest: /etc/ssh/sshd_config
-    regexp: '^[#\s]*PermitRootLogin\s+.*$'
-    line: '#PermitRootLogin prohibit-password'
-    backup: yes
-    validate: /usr/sbin/sshd -t -f %s
-  when: ssh_permitrootlogin is not defined or ( ssh_permitrootlogin|lower() == 'prohibit-password' )
-  notify: ssh restart
-  tags:
-    - ssh
-    - permitrootlogin
+- include: "{{ ansible_os_family }}.yml"
 
 - name: passwordauthentication
-  # #PasswordAuthentication *
-  # will be replaced with
-  # PasswordAuthentication no
   lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: '^[#\s]*PasswordAuthentication\s+.*$'
@@ -25,9 +11,25 @@
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_passwordauthentication is defined
-    - ssh_passwordauthentication|lower() in ['yes','no']
+    - ssh_passwordauthentication | lower() in [ 'yes', 'no' ]
   notify: ssh restart
   tags:
     - ssh
     - passwordauthentication
+
+- name: gssapiauthentication
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^[#\s]*GSSAPIAuthentication\s+.*$'
+    line: 'GSSAPIAuthentication {{ ssh_gssapiauthentication | lower() }}'
+    backup: yes
+    backrefs: yes
+    validate: /usr/sbin/sshd -t -f %s
+  when:
+    - ssh_gssapiauthentication is defined
+    - ssh_gssapiauthentication | lower() in [ 'yes', 'no' ]
+  notify: sshd restart
+  tags:
+    - ssh
+    - gssapiauthentication
 ...

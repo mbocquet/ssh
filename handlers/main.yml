@@ -2,7 +2,7 @@
 # handlers file for ssh
 - name: ssh restart
   service:
-    name: 'ssh'
+    name: 'sshd'
     state: 'restarted'
   tags:
     - ssh

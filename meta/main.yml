@@ -1,6 +1,6 @@
 galaxy_info:
   author: Mathias BOCQUET
-  description: Ansible role to configure ssh on Debian
+  description: Ansible role to configure ssh
   company: Sekoya.org
 
   license: GPLv3
@@ -8,9 +8,14 @@ galaxy_info:
   min_ansible_version: 2.4
 
   platforms:
+  - name: EL
+    versions:
+    - 6
+    - 7
   - name: Debian
     versions:
-    - all
+    - jessie
+    - stretch
 
   galaxy_tags:
     - ssh
