@@ -2,6 +2,33 @@
 # tasks file for ssh
 - include: "{{ ansible_os_family }}.yml"
 
+- name: port
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^[#\s]*Port\s+.*$'
+    line: '#Port 22'
+    backup: yes
+    validate: /usr/sbin/sshd -t -f %s
+  when: ssh_port is not defined or ( ssh_port is defined and ssh_port == 22 )
+  notify: ssh restart
+  tags:
+    - ssh
+    - port
+
+- name: port
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^[#\s]*Port\s+.*$'
+    line: 'Port {{ ssh_port }}'
+    backup: yes
+    validate: /usr/sbin/sshd -t -f %s
+  when:
+    - ssh_port is defined
+  notify: ssh restart
+  tags:
+    - ssh
+    - port
+
 - name: passwordauthentication
   lineinfile:
     dest: /etc/ssh/sshd_config

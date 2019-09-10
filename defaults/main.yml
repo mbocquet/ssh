@@ -1,6 +1,10 @@
 ---
 # defaults file for ssh
 
+# ssh_port (port number)
+# default is 22
+# ssh_port: 222
+
 # ssh_permitrootlogin (yes|prohibit-password|forced-commands-only|no)
 # Default distributions values are :
 # Debian : prohibit-password.
