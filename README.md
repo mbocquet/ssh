@@ -22,7 +22,7 @@ None.
 
 ## Install this role as submodule in a git repository
 
-`git submodule add https://github.com/mbocquet/ssh.git roles/ssh`
+`git submodule add <clone-url>.git roles/ssh`
 
 ## Example Playbook
 
