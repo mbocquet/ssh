@@ -59,4 +59,19 @@
   tags:
     - ssh
     - gssapiauthentication
+
+- name: sftp
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^[#\s]*Subsystem\s+sftp.*$'
+    line: '{{ ssh_sftp_command }}'
+    backup: yes
+    backrefs: yes
+    validate: /usr/sbin/sshd -t -f %s
+  when:
+    - ssh_sftp_command is defined
+  notify: ssh restart
+  tags:
+    - ssh
+    - sftp
 ...

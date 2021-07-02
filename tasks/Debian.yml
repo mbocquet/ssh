@@ -1,20 +1,34 @@
 ---
-- name: permitrootlogin
-  lineinfile:
-    dest: /etc/ssh/sshd_config
-    regexp: '^[#\s]*PermitRootLogin\s+.*$'
-    line: '#PermitRootLogin prohibit-password'
-    backup: yes
-    validate: /usr/sbin/sshd -t -f %s
+- block:
+  - name: clean extra lines
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^\s*PermitRootLogin\s+.*$'
+      state: absent
+      backup: yes
+      validate: /usr/sbin/sshd -t -f %s
+    notify: ssh restart
+    tags:
+      - ssh
+      - permitrootlogin
+
+  - name: permitrootlogin
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^[#\s]*PermitRootLogin\s+.*$'
+      line: '#PermitRootLogin prohibit-password'
+      backup: yes
+      validate: /usr/sbin/sshd -t -f %s
+    notify: ssh restart
+    tags:
+      - ssh
+      - permitrootlogin
+
   when: ssh_permitrootlogin is not defined or ( ssh_permitrootlogin | lower() == 'prohibit-password' )
-  notify: ssh restart
-  tags:
-    - ssh
-    - permitrootlogin
 
 - name: permitrootlogin
   lineinfile:
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '^[#\s]*PermitRootLogin\s+.*$'
     line: 'PermitRootLogin {{ ssh_permitrootlogin }}'
     backup: yes

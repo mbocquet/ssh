@@ -20,4 +20,8 @@
 # Debian : commented / no
 # RedHat : uncommented / yes
 # ssh_gssapiauthentication: 'no'
-...
+
+# ssh_sftp_command
+# Default is :
+# Subsystem\tsftp\t/usr/lib/openssh/sftp-server
+# ssh_sftp_command: 'Subsystem\tsftp\t/usr/lib/openssh/sftp-server -u 0002'
