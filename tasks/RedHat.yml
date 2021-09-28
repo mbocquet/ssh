@@ -4,7 +4,7 @@
     dest: /etc/ssh/sshd_config
     regexp: '^[#\s]*PermitRootLogin\s+.*$'
     line: 'PermitRootLogin {{ ssh_permitrootlogin }}'
-    backup: yes
+    backup: true
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_permitrootlogin is defined
@@ -13,4 +13,3 @@
   tags:
     - ssh
     - permitrootlogin
-...

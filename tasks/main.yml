@@ -7,7 +7,7 @@
     dest: /etc/ssh/sshd_config
     regexp: '^[#\s]*Port\s+.*$'
     line: '#Port 22'
-    backup: yes
+    backup: true
     validate: /usr/sbin/sshd -t -f %s
   when: ssh_port is not defined or ( ssh_port is defined and ssh_port == 22 )
   notify: ssh restart
@@ -20,7 +20,7 @@
     dest: /etc/ssh/sshd_config
     regexp: '^[#\s]*Port\s+.*$'
     line: 'Port {{ ssh_port }}'
-    backup: yes
+    backup: true
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_port is defined
@@ -34,7 +34,7 @@
     dest: /etc/ssh/sshd_config
     regexp: '^[#\s]*PasswordAuthentication\s+.*$'
     line: 'PasswordAuthentication {{ ssh_passwordauthentication | lower() }}'
-    backup: yes
+    backup: true
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_passwordauthentication is defined
@@ -49,8 +49,8 @@
     dest: /etc/ssh/sshd_config
     regexp: '^[#\s]*GSSAPIAuthentication\s+.*$'
     line: 'GSSAPIAuthentication {{ ssh_gssapiauthentication | lower() }}'
-    backup: yes
-    backrefs: yes
+    backup: true
+    backrefs: true
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_gssapiauthentication is defined
@@ -65,8 +65,8 @@
     dest: /etc/ssh/sshd_config
     regexp: '^[#\s]*Subsystem\s+sftp.*$'
     line: '{{ ssh_sftp_command }}'
-    backup: yes
-    backrefs: yes
+    backup: true
+    backrefs: true
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_sftp_command is defined
@@ -74,4 +74,3 @@
   tags:
     - ssh
     - sftp
-...
