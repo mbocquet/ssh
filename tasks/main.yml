@@ -1,6 +1,7 @@
 ---
 # tasks file for ssh
-- include_tasks: "{{ ansible_os_family }}.yml"
+- name: include OS specific tasks
+  include_tasks: "{{ ansible_os_family }}.yml"
 
 - name: port
   lineinfile:

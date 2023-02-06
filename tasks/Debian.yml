@@ -38,7 +38,8 @@
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_permitrootlogin is defined
-    - ssh_permitrootlogin | lower() in [ 'yes', 'no', 'forced-commands-only' ]
+    - ssh_permitrootlogin | lower() in
+      [ 'yes', 'no', 'forced-commands-only' ]
   notify: ssh restart
   tags:
     - ssh
