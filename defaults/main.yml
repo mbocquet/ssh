@@ -1,6 +1,8 @@
 ---
 # defaults file for ssh
 
+ssh_config_file: /etc/ssh/sshd_config.d/local.conf
+
 # ssh_port (port number)
 # default is 22
 # ssh_port: 222

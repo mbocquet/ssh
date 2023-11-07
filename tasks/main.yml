@@ -2,28 +2,54 @@
 # tasks file for ssh
 - include_tasks: "{{ ansible_os_family }}.yml"
 
-- name: port
+- name: Check sshd local config file presence
+  ansible.builtin.stat:
+    path: "{{ ssh_config_file }}"
+  register: sshd_local_config_file
+  when:
+    - ssh_config_file is defined
+  tags:
+    - ssh
+    - stat
+
+- name: touch sshd local config file
+  ansible.builtin.file:
+    path: "{{ ssh_config_file }}"
+    state: touch
+  when:
+    - ssh_config_file is defined
+    - not sshd_local_config_file.stat.exists
+  tags:
+    - ssh
+    - stat
+
+- name: Port in default config file
   lineinfile:
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '^[#\s]*Port\s+.*$'
     line: '#Port 22'
     backup: yes
     validate: /usr/sbin/sshd -t -f %s
-  when: ssh_port is not defined or ( ssh_port is defined and ssh_port == 22 )
+  when:
+    - ssh_port is not defined
+      or ( ssh_port is defined and ssh_port == 22 )
+      or ssh_config_file is defined
   notify: ssh restart
   tags:
     - ssh
     - port
 
-- name: port
+- name: Port in local config file
   lineinfile:
-    dest: /etc/ssh/sshd_config
+    path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
     regexp: '^[#\s]*Port\s+.*$'
     line: 'Port {{ ssh_port }}'
     backup: yes
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_port is defined
+    - ssh_config_file is defined
+    - not ansible_check_mode
   notify: ssh restart
   tags:
     - ssh
@@ -31,7 +57,7 @@
 
 - name: passwordauthentication
   lineinfile:
-    dest: /etc/ssh/sshd_config
+    path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
     regexp: '^[#\s]*PasswordAuthentication\s+.*$'
     line: 'PasswordAuthentication {{ ssh_passwordauthentication | lower() }}'
     backup: yes
@@ -39,6 +65,7 @@
   when:
     - ssh_passwordauthentication is defined
     - ssh_passwordauthentication | lower() in [ 'yes', 'no' ]
+    - not ansible_check_mode
   notify: ssh restart
   tags:
     - ssh
@@ -46,11 +73,10 @@
 
 - name: gssapiauthentication
   lineinfile:
-    dest: /etc/ssh/sshd_config
+    path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
     regexp: '^[#\s]*GSSAPIAuthentication\s+.*$'
     line: 'GSSAPIAuthentication {{ ssh_gssapiauthentication | lower() }}'
     backup: yes
-    backrefs: yes
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_gssapiauthentication is defined
@@ -62,11 +88,11 @@
 
 - name: sftp
   lineinfile:
-    dest: /etc/ssh/sshd_config
+    # Subsystem can't be outside main sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '^[#\s]*Subsystem\s+sftp.*$'
-    line: '{{ ssh_sftp_command }}'
+    line: "{{ ssh_sftp_command }}"
     backup: yes
-    backrefs: yes
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_sftp_command is defined
@@ -74,4 +100,3 @@
   tags:
     - ssh
     - sftp
-...
