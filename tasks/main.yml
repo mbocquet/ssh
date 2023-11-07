@@ -1,6 +1,7 @@
 ---
 # tasks file for ssh
-- include_tasks: "{{ ansible_os_family }}.yml"
+- name: include OS specific tasks
+  include_tasks: "{{ ansible_os_family }}.yml"
 
 - name: Check sshd local config file presence
   ansible.builtin.stat:
@@ -28,7 +29,7 @@
     path: /etc/ssh/sshd_config
     regexp: '^[#\s]*Port\s+.*$'
     line: '#Port 22'
-    backup: yes
+    backup: true
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_port is not defined
@@ -44,7 +45,7 @@
     path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
     regexp: '^[#\s]*Port\s+.*$'
     line: 'Port {{ ssh_port }}'
-    backup: yes
+    backup: true
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_port is defined
@@ -60,7 +61,7 @@
     path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
     regexp: '^[#\s]*PasswordAuthentication\s+.*$'
     line: 'PasswordAuthentication {{ ssh_passwordauthentication | lower() }}'
-    backup: yes
+    backup: true
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_passwordauthentication is defined
@@ -76,7 +77,8 @@
     path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
     regexp: '^[#\s]*GSSAPIAuthentication\s+.*$'
     line: 'GSSAPIAuthentication {{ ssh_gssapiauthentication | lower() }}'
-    backup: yes
+    backup: true
+    backrefs: true
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_gssapiauthentication is defined
@@ -91,8 +93,9 @@
     # Subsystem can't be outside main sshd_config
     path: /etc/ssh/sshd_config
     regexp: '^[#\s]*Subsystem\s+sftp.*$'
-    line: "{{ ssh_sftp_command }}"
-    backup: yes
+    line: '{{ ssh_sftp_command }}'
+    backup: true
+    backrefs: true
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_sftp_command is defined
