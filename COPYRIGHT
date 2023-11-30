@@ -1,6 +1,6 @@
 'ssh'. Ansible role to configure ssh.
 
-Copyright © 2019-2020 Mathias Bocquet (mbocquet@sekoya.org)
+Copyright © 2019-2023 Mathias Bocquet (mbocquet@sekoya.org)
 
 This file is part of 'ssh' Ansible role.
 
