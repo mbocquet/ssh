@@ -1,5 +1,8 @@
 ---
 - name: ssh
+  when:
+    ssh_permitrootlogin is not defined or
+    ssh_permitrootlogin | lower() == 'prohibit-password'
   block:
     - name: clean extra lines
       lineinfile:
@@ -24,9 +27,6 @@
       tags:
         - ssh
         - permitrootlogin
-  when:
-    ssh_permitrootlogin is not defined or
-    ssh_permitrootlogin | lower() == 'prohibit-password'
 
 - name: permitrootlogin
   lineinfile:

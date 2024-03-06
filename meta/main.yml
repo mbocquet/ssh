@@ -1,3 +1,4 @@
+---
 galaxy_info:
   author: Mathias BOCQUET
   description: Ansible role to configure ssh
@@ -7,19 +8,19 @@ galaxy_info:
 
   license: GPLv3
 
-  min_ansible_version: 2.4
+  min_ansible_version: "2.4"
 
   platforms:
   - name: EL
     versions:
-    - 6
-    - 7
-    - 8
+      - "6"
+      - "7"
+      - "8"
   - name: Debian
     versions:
-    - jessie
-    - stretch
-    - buster
+      - jessie
+      - stretch
+      - buster
 
   galaxy_tags:
     - ssh
