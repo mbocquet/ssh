@@ -51,7 +51,6 @@
   when:
     - ssh_port is defined
     - ssh_config_file is defined
-    - not ansible_check_mode
   notify: ssh restart
   tags:
     - ssh
@@ -67,7 +66,6 @@
   when:
     - ssh_passwordauthentication is defined
     - ssh_passwordauthentication | lower() in [ 'yes', 'no' ]
-    - not ansible_check_mode
   notify: ssh restart
   tags:
     - ssh
