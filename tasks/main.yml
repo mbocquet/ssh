@@ -1,7 +1,7 @@
 ---
 # tasks file for ssh
 - name: include OS specific tasks
-  include_tasks: "{{ ansible_os_family }}.yml"
+  ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml"
 
 - name: Check sshd local config file presence
   ansible.builtin.stat:
@@ -26,7 +26,7 @@
     - stat
 
 - name: Port in default config file
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^[#\s]*Port\s+.*$'
     line: '#Port 22'
@@ -42,7 +42,7 @@
     - port
 
 - name: Port in local config file
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
     regexp: '^[#\s]*Port\s+.*$'
     line: 'Port {{ ssh_port }}'
@@ -57,7 +57,7 @@
     - port
 
 - name: passwordauthentication
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
     regexp: '^[#\s]*PasswordAuthentication\s+.*$'
     line: 'PasswordAuthentication {{ ssh_passwordauthentication | lower() }}'
@@ -72,7 +72,7 @@
     - passwordauthentication
 
 - name: gssapiauthentication
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
     regexp: '^[#\s]*GSSAPIAuthentication\s+.*$'
     line: 'GSSAPIAuthentication {{ ssh_gssapiauthentication | lower() }}'
@@ -88,7 +88,7 @@
     - gssapiauthentication
 
 - name: sftp
-  lineinfile:
+  ansible.builtin.lineinfile:
     # Subsystem can't be outside main sshd_config
     path: /etc/ssh/sshd_config
     regexp: '^[#\s]*Subsystem\s+sftp.*$'

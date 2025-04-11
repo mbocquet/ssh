@@ -5,7 +5,7 @@
     ssh_permitrootlogin | lower() == 'prohibit-password'
   block:
     - name: clean extra lines
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^\s*PermitRootLogin\s+.*$'
         state: absent
@@ -17,7 +17,7 @@
         - permitrootlogin
 
     - name: permitrootlogin
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^[#\s]*PermitRootLogin\s+.*$'
         line: '#PermitRootLogin prohibit-password'
@@ -29,7 +29,7 @@
         - permitrootlogin
 
 - name: permitrootlogin
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^[#\s]*PermitRootLogin\s+.*$'
     line: 'PermitRootLogin {{ ssh_permitrootlogin }}'
