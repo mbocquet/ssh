@@ -11,16 +11,19 @@ galaxy_info:
   min_ansible_version: "2.4"
 
   platforms:
-  - name: EL
-    versions:
-      - "6"
-      - "7"
-      - "8"
-  - name: Debian
-    versions:
-      - jessie
-      - stretch
-      - buster
+    - name: EL
+      versions:
+        - "6"
+        - "7"
+        - "8"
+    - name: Debian
+      versions:
+        - jessie
+        - stretch
+        - buster
+        - bullseye
+        - bookworm
+        - trixie
 
   galaxy_tags:
     - ssh
