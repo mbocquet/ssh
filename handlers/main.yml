@@ -1,9 +1,8 @@
 ---
 # handlers file for ssh
-- name: ssh restart
+- name: SSH restart
   ansible.builtin.service:
-    name: 'ssh'
-    state: 'restarted'
+    name: ssh
+    state: restarted
   tags:
     - ssh
-...

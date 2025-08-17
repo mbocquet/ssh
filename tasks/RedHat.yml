@@ -1,5 +1,5 @@
 ---
-- name: permitrootlogin
+- name: PermitRootlogin
   ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: '^[#\s]*PermitRootLogin\s+.*$'
@@ -14,7 +14,7 @@
       'without-password',
       'prohibit-password',
       'forced-commands-only' ]
-  notify: ssh restart
+  notify: SSH restart
   tags:
     - ssh
     - permitrootlogin

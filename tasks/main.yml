@@ -1,6 +1,6 @@
 ---
 # tasks file for ssh
-- name: include OS specific tasks
+- name: Include OS specific tasks
   ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml"
 
 - name: Check sshd local config file presence
@@ -13,7 +13,7 @@
     - ssh
     - stat
 
-- name: touch sshd local config file
+- name: Touch sshd local config file
   ansible.builtin.file:
     path: "{{ ssh_config_file }}"
     state: touch
@@ -36,7 +36,7 @@
     - ssh_port is not defined
       or ( ssh_port is defined and ssh_port == 22 )
       or ssh_config_file is defined
-  notify: ssh restart
+  notify: SSH restart
   tags:
     - ssh
     - port
@@ -51,12 +51,12 @@
   when:
     - ssh_port is defined
     - ssh_config_file is defined
-  notify: ssh restart
+  notify: SSH restart
   tags:
     - ssh
     - port
 
-- name: passwordauthentication
+- name: PasswordAuthentication
   ansible.builtin.lineinfile:
     path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
     regexp: '^[#\s]*PasswordAuthentication\s+.*$'
@@ -66,12 +66,12 @@
   when:
     - ssh_passwordauthentication is defined
     - ssh_passwordauthentication | lower() in [ 'yes', 'no' ]
-  notify: ssh restart
+  notify: SSH restart
   tags:
     - ssh
     - passwordauthentication
 
-- name: gssapiauthentication
+- name: Gssapiauthentication
   ansible.builtin.lineinfile:
     path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
     regexp: '^[#\s]*GSSAPIAuthentication\s+.*$'
@@ -82,12 +82,12 @@
   when:
     - ssh_gssapiauthentication is defined
     - ssh_gssapiauthentication | lower() in [ 'yes', 'no' ]
-  notify: sshd restart
+  notify: SSH restart
   tags:
     - ssh
     - gssapiauthentication
 
-- name: sftp
+- name: SFTP
   ansible.builtin.lineinfile:
     # Subsystem can't be outside main sshd_config
     path: /etc/ssh/sshd_config
@@ -98,7 +98,7 @@
     validate: /usr/sbin/sshd -t -f %s
   when:
     - ssh_sftp_command is defined
-  notify: ssh restart
+  notify: SSH restart
   tags:
     - ssh
     - sftp
