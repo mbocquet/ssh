@@ -1,5 +1,8 @@
 ---
 - name: SSH
+  tags:
+    - ssh
+    - permitrootlogin
   when:
     ssh_permitrootlogin is not defined or
     ssh_permitrootlogin | lower() == 'prohibit-password'
@@ -12,9 +15,6 @@
         backup: true
         validate: /usr/sbin/sshd -t -f %s
       notify: SSH restart
-      tags:
-        - ssh
-        - permitrootlogin
 
     - name: Permitrootlogin
       ansible.builtin.lineinfile:
@@ -24,22 +24,3 @@
         backup: true
         validate: /usr/sbin/sshd -t -f %s
       notify: SSH restart
-      tags:
-        - ssh
-        - permitrootlogin
-
-- name: PermitRootlogin
-  ansible.builtin.lineinfile:
-    path: /etc/ssh/sshd_config
-    regexp: '^[#\s]*PermitRootLogin\s+.*$'
-    line: 'PermitRootLogin {{ ssh_permitrootlogin }}'
-    backup: true
-    validate: /usr/sbin/sshd -t -f %s
-  when:
-    - ssh_permitrootlogin is defined
-    - ssh_permitrootlogin | lower() in
-      [ 'yes', 'no', 'forced-commands-only' ]
-  notify: SSH restart
-  tags:
-    - ssh
-    - permitrootlogin
