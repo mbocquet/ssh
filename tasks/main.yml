@@ -28,8 +28,8 @@
 - name: Port in default config file
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
-    regexp: '^[#\s]*Port\s+.*$'
-    line: '#Port 22'
+    regexp: "^[#\\s]*Port\\s+.*$"
+    line: "#Port 22"
     backup: true
     validate: /usr/sbin/sshd -t -f %s
   when:
@@ -44,8 +44,8 @@
 - name: Port in local config file
   ansible.builtin.lineinfile:
     path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
-    regexp: '^[#\s]*Port\s+.*$'
-    line: 'Port {{ ssh_port }}'
+    regexp: "^[#\\s]*Port\\s+.*$"
+    line: "Port {{ ssh_port }}"
     backup: true
     validate: /usr/sbin/sshd -t -f %s
   when:
@@ -59,8 +59,8 @@
 - name: PasswordAuthentication
   ansible.builtin.lineinfile:
     path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
-    regexp: '^[#\s]*PasswordAuthentication\s+.*$'
-    line: 'PasswordAuthentication {{ ssh_passwordauthentication | lower() }}'
+    regexp: "^[#\\s]*PasswordAuthentication\\s+.*$"
+    line: "PasswordAuthentication {{ ssh_passwordauthentication | lower() }}"
     backup: true
     validate: /usr/sbin/sshd -t -f %s
   when:
@@ -74,8 +74,8 @@
 - name: Gssapiauthentication
   ansible.builtin.lineinfile:
     path: "{{ ssh_config_file | default('/etc/ssh/sshd_config') }}"
-    regexp: '^[#\s]*GSSAPIAuthentication\s+.*$'
-    line: 'GSSAPIAuthentication {{ ssh_gssapiauthentication | lower() }}'
+    regexp: "^[#\\s]*GSSAPIAuthentication\\s+.*$"
+    line: "GSSAPIAuthentication {{ ssh_gssapiauthentication | lower() }}"
     backup: true
     backrefs: true
     validate: /usr/sbin/sshd -t -f %s
@@ -91,8 +91,8 @@
   ansible.builtin.lineinfile:
     # Subsystem can't be outside main sshd_config
     path: /etc/ssh/sshd_config
-    regexp: '^[#\s]*Subsystem\s+sftp.*$'
-    line: '{{ ssh_sftp_command }}'
+    regexp: "^[#\\s]*Subsystem\\s+sftp.*$"
+    line: "{{ ssh_sftp_command }}"
     backup: true
     backrefs: true
     validate: /usr/sbin/sshd -t -f %s
