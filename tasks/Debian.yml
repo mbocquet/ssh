@@ -10,7 +10,7 @@
     - name: Clean extra lines
       ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
-        regexp: "^\\s*PermitRootLogin\\s+.*$"
+        regexp: ^\s*PermitRootLogin\s+.*$
         state: absent
         backup: true
         validate: /usr/sbin/sshd -t -f %s
@@ -19,7 +19,7 @@
     - name: Permitrootlogin
       ansible.builtin.lineinfile:
         path: /etc/ssh/sshd_config
-        regexp: "^[#\\s]*PermitRootLogin\\s+.*$"
+        regexp: ^[#\s]*PermitRootLogin\s+.*$"
         line: "#PermitRootLogin prohibit-password"
         backup: true
         validate: /usr/sbin/sshd -t -f %s
